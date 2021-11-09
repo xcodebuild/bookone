@@ -314,8 +314,8 @@ class Book {
 				cors: '*', // Optional, defaults to undefined
 				followSymlink: true, // Optional, defaults to a 404 error
 				templates: {
-					index: 'README.html', // Optional, defaults to 'index.html'
-					notFound: 'README.html', // Optional, defaults to undefined
+					index: 'index.html', // Optional, defaults to 'index.html'
+					notFound: 'index.html', // Optional, defaults to undefined
 				},
 			});
 

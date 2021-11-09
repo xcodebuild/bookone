@@ -5,8 +5,6 @@ import Book from '../book';
 const argv = minimist(process.argv.slice(2));
 const [action] = argv._;
 
-console.log(argv);
-
 const options = {
     title: argv.t || '',
     author: argv.author || '',
