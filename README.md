@@ -1,0 +1,22 @@
+## bookone
+
+Zero configuration book genereator with Markdown.
+
+## Usage
+```
+# install bookone
+npm install -g bookone
+
+# init a book
+mkdir -p newbook/book
+cd newbook
+cat '# Intro Title\n I am content' > book/00-intro.md
+cat '# Chapter 1\n I am content of chapter 1' > book/01-chapter-one.md
+
+# start a server and watch change
+bookone start
+
+# build only
+bookone build
+```
+

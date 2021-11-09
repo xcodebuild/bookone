@@ -1,0 +1,40 @@
+{
+  "name": "bookone",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "author": "me@xcodebuild.com",
+  "license": "MIT",
+  "bin": {
+    "bookone": "bin/bookone"
+  },
+  "devDependencies": {
+    "@types/fs-extra-promise": "^1.0.10",
+    "@types/glob": "^7.2.0",
+    "@types/jest": "^27.0.2",
+    "@types/markdown-it": "^12.2.3",
+    "@types/minimist": "^1.2.2",
+    "@types/progressbar": "^1.1.0",
+    "@types/xo": "^0.39.1",
+    "jest": "^27.3.1",
+    "microbundle": "^0.14.1",
+    "ts-jest": "^27.0.7",
+    "xo": "^0.46.4"
+  },
+  "scripts": {
+    "build": "microbundle build src/entry/*.ts -no-compress  --target node",
+    "start": "NODE_ENV=development microbundle watch src/entry/*.ts -no-compress --target node",
+    "test": "jest",
+    "lint": "xo --fix --prettier",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "fs-extra-promise": "^1.0.1",
+    "glob": "^7.2.0",
+    "handlebars": "^4.7.7",
+    "markdown-it": "^12.2.0",
+    "minimist": "^1.2.5",
+    "node-watch": "^0.7.2",
+    "static-server": "^2.2.1"
+  }
+}
