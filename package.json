@@ -1,6 +1,6 @@
 {
   "name": "bookone",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "author": "me@xcodebuild.com",
   "license": "MIT",
@@ -8,8 +8,8 @@
     "bookone": "bin/bookone"
   },
   "files": [
-    "src",
     "dist",
+    "theme",
     "package.json"
   ],
   "devDependencies": {
