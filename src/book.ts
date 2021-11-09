@@ -4,11 +4,12 @@ import glob from 'glob';
 import fs from 'fs-extra-promise';
 import MarkdownIt from 'markdown-it';
 import Handlebars from 'handlebars';
-// @ts-expect-error
-import StaticServer from 'static-server';
 import colors from 'colors';
 import {addTask} from './task';
 import {readTitleFromMarkdown} from './utils';
+import koa from 'koa';
+import koaStatic from 'koa-static';
+import mount from 'koa-mount';
 
 const THEME_DIR = path.join(__dirname, '../theme');
 
@@ -81,13 +82,19 @@ class Content {
 
 	get relativePath(): string {
 		if (this.isLeaf) {
-			return this.outputPath.replace(this.book.outputDirPath, '');
+			return path.join(this.book.options.base, this.outputPath.replace(this.book.outputDirPath, ''));
 		}
 
 		return this.childrenList[0].relativePath;
 	}
 
 	generateTocHTML(): string {
+        const excludeChapterFisrtChildList = (content: Content) => {
+            if (!content.parent?.parent) {
+                return content.childrenList;
+            }
+            return content.childrenList.slice(1);
+        }
 		const vars = {
 			title: this.title,
 			href: this.relativePath,
@@ -95,8 +102,7 @@ class Content {
 			// Skip first intro section
 			children: this.isLeaf
 				? null
-				: this.childrenList
-						.slice(1)
+				: excludeChapterFisrtChildList(this)
 						.map((item) => item.generateTocHTML())
 						.join(''),
 			root: this.parent === null,
@@ -157,6 +163,7 @@ class Book {
 
     options = {
         defaultTheme: 'light',
+        base: '/',
     };
 
     constructor(options: Record<string, any>) {
@@ -263,7 +270,7 @@ class Book {
 							const html = this.template!({
 								...this.getConfig(),
 								content,
-								pathToRoot: '/',
+								pathToRoot: this.getConfig().base,
 								next: {
 									link: child.next?.relativePath,
 								},
@@ -306,24 +313,19 @@ class Book {
 	}
 
 	initServer() {
-		const startServer = () => {
-			const server = new StaticServer({
-				rootPath: this.outputDirPath, // Required, the root of the server file tree
-				port: 8337, // Required, the port to listen
-				name: 'bookone', // Optional, will set "X-Powered-by" HTTP header
-				cors: '*', // Optional, defaults to undefined
-				followSymlink: true, // Optional, defaults to a 404 error
-				templates: {
-					index: 'index.html', // Optional, defaults to 'index.html'
-					notFound: 'index.html', // Optional, defaults to undefined
-				},
-			});
+        const startServer = () => {
+            const app = new koa();
 
-			server.start(function () {
-				console.log('Server listening to', server.port);
-				console.log(`🚀 Open in browser: http://127.0.0.1:${server.port}`);
-			});
-		};
+            const baseApp = new koa();
+            baseApp.use(koaStatic(this.outputDirPath));
+
+            app.use(mount(this.getConfig().base, baseApp));
+
+            const PORT = 8337;
+            app.listen(PORT);
+            console.log('Server listening to', PORT);
+            console.log(`🚀 Open in browser: http://127.0.0.1:${PORT}${this.getConfig().base}`);
+        };
 
 		addTask('Start server', startServer);
 	}
