@@ -146,7 +146,7 @@ class Content {
 	}
 
 	renderMarkdown() {
-		return MarkdownIt().render(this.getContent(), {});
+		return this.book.md!.render(this.getContent(), {});
 	}
 }
 
@@ -155,6 +155,7 @@ class Book {
 	entryDir = 'book';
 	outputDir = 'dist';
 	publicDir = 'public';
+    md: MarkdownIt | null = null;
 
 	template?: HandlebarsTemplateDelegate;
 
@@ -235,6 +236,7 @@ class Book {
 			});
 		});
 		this.initTemplateEngine();
+        this.initMarkdown();
 	}
 
 	initTemplateEngine() {
@@ -242,6 +244,29 @@ class Book {
 			fs.readFileSync(path.join(THEME_DIR, 'index.hbs'), 'utf-8'),
 		);
 	}
+
+    initMarkdown() {
+        this.md = new MarkdownIt();
+        this.md.core.ruler.push('baseurl', (state: any): any => {
+            const baseUrl = this.getConfig().base;
+            function rewrite(tokens: any[]) {
+              for (const token of tokens) {
+                if (token.type === 'image') {
+                  for (const attr of token.attrs) {
+                    if (attr[0] === 'src') {
+                      attr[1] = baseUrl + attr[1].replace(/^..\//, '');
+                    }
+                  }
+                }
+                // Process recursively
+                if (token.children !== null) {
+                  rewrite(token.children);
+                }
+              }
+            }
+            rewrite(state.tokens);
+        });
+    }
 
 	render() {
 		const renderContent = (content: Content) => {
