@@ -7,6 +7,11 @@
   "bin": {
     "bookone": "bin/bookone"
   },
+  "files": [
+    "src",
+    "dist",
+    "package.json"
+  ],
   "devDependencies": {
     "@types/fs-extra-promise": "^1.0.10",
     "@types/glob": "^7.2.0",
