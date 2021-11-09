@@ -1,6 +1,9 @@
 # bookone
 
 Zero configuration book genereator with Markdown.
+# Github
+
+[https://github.com/xcodebuild/bookone](https://github.com/xcodebuild/bookone)
 
 ## Usage
 ```
@@ -26,3 +29,4 @@ bookone build -t bookone -a author
 
 # Related
 - default theme from [mdBook](https://github.com/rust-lang/mdBook).
+
