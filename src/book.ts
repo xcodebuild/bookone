@@ -90,7 +90,7 @@ class Content {
 
 	generateTocHTML(): string {
         const excludeChapterFisrtChildList = (content: Content) => {
-            if (!content.parent?.parent) {
+            if (!content.parent) {
                 return content.childrenList;
             }
             return content.childrenList.slice(1);
