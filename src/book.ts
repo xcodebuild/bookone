@@ -277,7 +277,7 @@ class Book {
             let url = token.attrs![srcIndex][1];
 
             if (!/^http(s)?/.test(url)) {
-                url = this.getConfig().base + url;
+                url = this.getConfig().base + url.replace(/^(\.\.\/)+/, '');
             }
 
             const id = url.split('#')[1] || '';
