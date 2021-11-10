@@ -274,7 +274,11 @@ class Book {
             const srcIndex = token.attrIndex('src');
             const titleIndex = token.attrIndex('title');
 
-            const url = token.attrs![srcIndex][1];
+            let url = token.attrs![srcIndex][1];
+
+            if (/^[\.|\/]/.test(url)) {
+                url = this.getConfig().base + url;
+            }
 
             const id = url.split('#')[1] || '';
 
