@@ -11,6 +11,8 @@ jobs:
           node-version: 10
       - run: npm install
       - run: npm test
+      - run: npm install codecov -g
+      - run: codecov
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
