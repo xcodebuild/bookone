@@ -51,7 +51,11 @@ class Content {
 
 	get title(): string {
 		if (this.isLeaf) {
-			return readTitleFromMarkdown(this.getContent());
+            try {
+                return readTitleFromMarkdown(this.getContent());
+            } catch (e) {
+                return this.name;
+            }
 		}
 
 		return this.childrenList[0].title;

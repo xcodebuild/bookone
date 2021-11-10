@@ -5,10 +5,13 @@ import Book from '../book';
 const argv = minimist(process.argv.slice(2));
 const [action] = argv._;
 
+const normalizeArray = (target: string | Array<string>) => Array.isArray(target) ? target : [target || '']
+
 const options = {
     title: argv.t || '',
     author: argv.author || '',
-    additionalJs: Array.isArray(argv.js) ? argv.js : [argv.js || ''],
+    additionalJs: normalizeArray(argv.js),
+    additionalCss: normalizeArray(argv.css),
     base: argv.b || '/',
 };
 
