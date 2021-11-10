@@ -10,10 +10,12 @@ const normalizeArray = (target: string | Array<string>) => Array.isArray(target)
 const options = {
     title: argv.t || '',
     author: argv.author || '',
-    additionalJs: normalizeArray(argv.js),
-    additionalCss: normalizeArray(argv.css),
+    additionalJs: normalizeArray(argv.j),
+    additionalCss: normalizeArray(argv.c),
     base: argv.b || '/',
 };
+
+console.log(options)
 
 if (action === 'start') {
 	new Book(options).start();
@@ -29,6 +31,7 @@ bookone build - Build book
     -t Title
     -a Author
     -b Base url
-    -js Additional JavaScript in webpage
+    -j Additional JavaScript in webpage
+    -c Additional CSS in webpage
 `);
 }
