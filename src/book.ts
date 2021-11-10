@@ -37,6 +37,8 @@ class Content {
 
 	isLeaf = false;
 
+    figureIndex = 1;
+
 	get indexPath(): number[] {
 		if (!this.parent) {
 			return [];
@@ -60,6 +62,19 @@ class Content {
 
 		return this.childrenList[0].title;
 	}
+
+    get isChapter() {
+        return this.parent && !this.parent.parent;
+    }
+
+    generateFigureIndex(): string {
+        // index order by chapter
+        if (this.isChapter) {
+            return `${this.indexPath}-${this.figureIndex ++}`;
+        }
+
+        return this.parent?.generateFigureIndex()!;
+    }
 
 	constructor(
 		public name: string,
@@ -150,7 +165,8 @@ class Content {
 	}
 
 	renderMarkdown() {
-		return this.book.md!.render(this.getContent(), {});
+        Content.currentContent = this;
+        return this.book.renderMarkdown(this.getContent());
 	}
 }
 
@@ -160,6 +176,8 @@ class Book {
 	outputDir = 'dist';
 	publicDir = 'public';
     md: MarkdownIt | null = null;
+
+    referenceMap: Record<string, string> = {};
 
 	template?: HandlebarsTemplateDelegate;
 
@@ -251,24 +269,40 @@ class Book {
 
     initMarkdown() {
         this.md = new MarkdownIt();
-        this.md.core.ruler.push('baseurl', (state: any): any => {
-            const baseUrl = this.getConfig().base;
-            function rewrite(tokens: any[]) {
-              for (const token of tokens) {
-                if (token.type === 'image') {
-                  for (const attr of token.attrs) {
-                    if (attr[0] === 'src') {
-                      attr[1] = baseUrl + attr[1].replace(/^..\//, '');
-                    }
-                  }
-                }
-                // Process recursively
-                if (token.children !== null) {
-                  rewrite(token.children);
-                }
-              }
+        this.md.renderer.rules.image = (tokens, idx, options, env, self) => {
+            const token = tokens[idx];
+            const srcIndex = token.attrIndex('src');
+            const titleIndex = token.attrIndex('title');
+
+            const url = token.attrs![srcIndex][1];
+
+            const id = url.split('#')[1] || '';
+
+            const caption = (titleIndex !== -1) ? token.attrs![titleIndex][1] : null;
+
+            const alt = this.md!.utils.escapeHtml(token.content);
+
+            const index = caption ? Content.currentContent?.generateFigureIndex() : null;
+
+            if (id && index) {
+                this.referenceMap[id] = index;
             }
-            rewrite(state.tokens);
+        
+            return getRenderer('image.hbs')({
+                alt,
+                caption,
+                url,
+                id,
+            });
+          }
+    }
+
+    renderMarkdown(content: string) {
+        const result = this.md?.render(content);
+        return result?.replace(/<a href=\"#(.*?)\"><\/a>/g, (_, g1) => {
+            const index = this.referenceMap[g1];
+            console.log(colors.yellow(`Can not found refernce with id: ${g1}`));
+            return `<a href="#${g1}">${index}</a>`;
         });
     }
 

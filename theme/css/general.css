@@ -179,3 +179,17 @@ blockquote {
 .result-no-output {
     font-style: italic;
 }
+
+figcaption {
+    padding: 3px;
+    font-size: 14px;
+}
+
+figure {
+    border: thin #c0c0c0 solid;
+    display: flex;
+    flex-flow: column;
+    padding: 5px;
+    max-width: 70%;
+    margin: auto;
+}

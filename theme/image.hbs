@@ -1,0 +1,11 @@
+<figure {{#if id}}id="{{id}}"{{/if}}>
+    <img
+        src="{{url}}"
+        alt="{{alt}}">
+    {{#if caption}}
+        <figcaption>
+            <strong>Figure {{index}}: </strong>
+            {{caption}}
+        </figcaption>
+    {{/if}}
+</figure>
