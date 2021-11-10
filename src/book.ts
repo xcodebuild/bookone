@@ -344,12 +344,16 @@ class Book {
             const baseApp = new koa();
             baseApp.use(koaStatic(this.outputDirPath));
 
-            app.use(mount(this.getConfig().base, baseApp));
+            const baseUrl = this.getConfig().base;
+            if (baseUrl === '/') {
+                app.use(koaStatic(this.outputDirPath));
+            }
+            app.use(mount(baseUrl, baseApp));
 
             const PORT = 8337;
             app.listen(PORT);
             console.log('Server listening to', PORT);
-            console.log(`🚀 Open in browser: http://127.0.0.1:${PORT}${this.getConfig().base}`);
+            console.log(`🚀 Open in browser: http://127.0.0.1:${PORT}${baseUrl}`);
         };
 
 		addTask('Start server', startServer);
