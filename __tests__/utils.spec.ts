@@ -1,4 +1,4 @@
-import { readTitleFromMarkdown } from "../dist/utils";
+import { readTitleFromMarkdown } from "../src/utils";
 
 describe('Utils methods', () => {
     it('readTitleFromMarkdown', () => {
