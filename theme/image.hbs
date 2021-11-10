@@ -1,4 +1,7 @@
+{{#if caption}}
 <figure {{#if id}}id="{{id}}"{{/if}}>
+{{/if}}
+
     <img
         src="{{url}}"
         alt="{{alt}}">
@@ -7,5 +10,5 @@
             <strong>Figure {{index}}: </strong>
             {{caption}}
         </figcaption>
-    {{/if}}
 </figure>
+{{/if}}
