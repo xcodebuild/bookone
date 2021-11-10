@@ -6,18 +6,26 @@ const tasks: Array<{
 	run: () => void;
 }> = [];
 
+let isWatchMode = false;
+
+export function setWatchMode() {
+    isWatchMode = true;
+}
+
 export function addTask(text: string, run: () => void, listenFile?: string[]) {
 	tasks.push({
 		text,
 		run,
 	});
 
-	listenFile?.forEach((file) => {
-		watch(file, {recursive: true}, (evt, name) => {
-			const tip = colors.yellow(`file change ${name}`);
-			addTask(`[${tip}] ${text}`, run);
-		});
-	});
+    if (isWatchMode) {
+        listenFile?.forEach((file) => {
+            watch(file, {recursive: true}, (evt, name) => {
+                const tip = colors.yellow(`file change ${name}`);
+                addTask(`[${tip}] ${text}`, run);
+            });
+        });
+    }
 }
 
 export const runTasks = () => {

@@ -5,7 +5,7 @@ import fs from 'fs-extra-promise';
 import MarkdownIt from 'markdown-it';
 import Handlebars from 'handlebars';
 import colors from 'colors';
-import {addTask, runTasks} from './task';
+import {addTask, runTasks, setWatchMode} from './task';
 import {readTitleFromMarkdown} from './utils';
 import koa from 'koa';
 import koaStatic from 'koa-static';
@@ -366,6 +366,7 @@ class Book {
 	}
 
 	start() {
+        setWatchMode();
 		this.scanFiles();
 		this.initTheme();
 		this.render();
@@ -396,13 +397,13 @@ class Book {
             app.use(mount(baseUrl, baseApp));
 
             const PORT = 8337;
-            runTasks();
             app.listen(PORT);
             console.log('Server listening to', PORT);
             console.log(`🚀 Open in browser: http://127.0.0.1:${PORT}${baseUrl}`);
         };
 
 		addTask('Start server', startServer);
+        runTasks();
 	}
 }
 
