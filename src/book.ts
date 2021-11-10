@@ -276,7 +276,7 @@ class Book {
 
             let url = token.attrs![srcIndex][1];
 
-            if (/^[\.|\/]/.test(url)) {
+            if (!/^http(s)?/.test(url)) {
                 url = this.getConfig().base + url;
             }
 
