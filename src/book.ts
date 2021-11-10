@@ -282,7 +282,8 @@ class Book {
 
             const alt = this.md!.utils.escapeHtml(token.content);
 
-            const index = caption ? Content.currentContent?.generateFigureIndex() : null;
+            let index = this.referenceMap[id];
+            index = index || (caption ? Content.currentContent?.generateFigureIndex() : null) as string;
 
             if (id && index) {
                 this.referenceMap[id] = index;
@@ -325,11 +326,11 @@ class Book {
 						removeIndexFromPath(outputFileRelative),
 					);
 
-					const content = child.renderMarkdown();
 					const dir = path.dirname(outputFile);
 					addTask(
 						`Rendering ${outputFile}`,
 						() => {
+                            const content = child.renderMarkdown();
 							const html = this.template!({
 								...this.getConfig(),
 								content,
