@@ -17,40 +17,44 @@ function readFileContent(filePath: string) {
     return fs.readFileSync(filePath, 'utf-8');
 }
 
+function runWithArg(cwd: string, argv: string[]) {
+    jest.resetModules();
+    process.cwd = () => cwd;
+    process.argv = [process.argv[0], process.argv[1]].concat(argv);
+    require('../src/entry/index');
+}
+
 describe('CLI', () => {
     beforeEach(cleanup);
     
     it('build works', () => {
-        const command = `cd ${EXAMPLE_DIR} && ${BOOKONE_BIN} build`;
-        shell.exec(command);
+        runWithArg(EXAMPLE_DIR, ['build']);
+
         const lsResult = shell.ls(EXAMPLE_DIST_DIR);
         expect(lsResult).toContain('chapter-one');
         expect(lsResult).toContain('chapter-two');
     });
 
     it('get title from markdown', () => {
-        const command = `cd ${EXAMPLE_DIR} && ${BOOKONE_BIN} build`;
-        shell.exec(command);
+        runWithArg(EXAMPLE_DIR, ['build']);
         // get Title
         expect(readFileContent(path.join(EXAMPLE_DIST_DIR, 'chapter-one/intro.html'))).toContain('Before Title');
     });
 
     it('build with -t', () => {
-        const command = `cd ${EXAMPLE_DIR} && ${BOOKONE_BIN} build -t BookTitle`;
-        shell.exec(command);
+        runWithArg(EXAMPLE_DIR, ['build', '-t', 'BookTitle']);
         // get Title
         expect(readFileContent(path.join(EXAMPLE_DIST_DIR, 'chapter-one/intro.html'))).toContain('<title>BookTitle</title>');
     });
 
     it('public files copy to dist', () => {
-        const command = `cd ${EXAMPLE_DIR} && ${BOOKONE_BIN} build`;
-        shell.exec(command);
+        runWithArg(EXAMPLE_DIR, ['build']);
         expect(readFileContent(path.join(EXAMPLE_DIST_DIR, 'public/mock.js'))).toMatchSnapshot();
     });
 
     it('image title will be display', () => {
-        const command = `cd ${EXAMPLE_DIR} && ${BOOKONE_BIN} build`;
-        shell.exec(command);
+        runWithArg(EXAMPLE_DIR, ['build']);
+
         const content = readFileContent(path.join(EXAMPLE_DIST_DIR, 'chapter-two/image/image-feature.html'));
         const $ = cheerio.load(content);
         expect($('figure img').attr('src')).toMatchSnapshot();
@@ -58,8 +62,7 @@ describe('CLI', () => {
     });
 
     it('image url repect baseurl', () => {
-        const command = `cd ${EXAMPLE_DIR} && ${BOOKONE_BIN} build -b /baseurl/`;
-        shell.exec(command);
+        runWithArg(EXAMPLE_DIR, ['build', '-b', '/baseurl/']);
         const content = readFileContent(path.join(EXAMPLE_DIST_DIR, 'chapter-two/image/image-feature.html'));
         const $ = cheerio.load(content);
         expect($('#mock img').attr('src')).toMatchSnapshot();
@@ -67,8 +70,8 @@ describe('CLI', () => {
     });
 
     it('image cite', () => {
-        const command = `cd ${EXAMPLE_DIR} && ${BOOKONE_BIN} build -b /baseurl/`;
-        shell.exec(command);
+        runWithArg(EXAMPLE_DIR, ['build', '-b', '/baseurl/']);
+
         const content = readFileContent(path.join(EXAMPLE_DIST_DIR, 'chapter-two/image/image-feature.html'));
         const $ = cheerio.load(content);
         expect($('#xcodebuild img').attr('src')).toMatchSnapshot();

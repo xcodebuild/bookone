@@ -34,7 +34,7 @@
   "scripts": {
     "build": "microbundle build src/entry/*.ts -no-compress  --target node",
     "start": "NODE_ENV=development microbundle watch src/entry/*.ts -no-compress --target node",
-    "test": "rimraf __tests__/fixture/example/dist && jest",
+    "test": "rimraf __tests__/fixture/example/dist && jest --coverage",
     "lint": "xo --fix --prettier",
     "prepublish": "npm run build"
   },

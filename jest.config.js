@@ -3,5 +3,10 @@
 module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
-	testRegex: '(test|spec)\.[jt]sx?$'
+	testRegex: '(test|spec)\.[jt]sx?$',
+	collectCoverageFrom: [
+		"src/**/*.{js,jsx,ts,tsx}",
+		"!**/node_modules/**",
+		"!**/vendor/**"
+	]
 };
