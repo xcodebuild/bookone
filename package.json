@@ -21,16 +21,19 @@
     "@types/koa-static": "^4.0.2",
     "@types/markdown-it": "^12.2.3",
     "@types/minimist": "^1.2.2",
+    "@types/shelljs": "^0.8.9",
     "@types/xo": "^0.39.1",
     "jest": "^27.3.1",
     "microbundle": "^0.14.1",
+    "rimraf": "^3.0.2",
+    "shelljs": "^0.8.4",
     "ts-jest": "^27.0.7",
     "xo": "^0.46.4"
   },
   "scripts": {
     "build": "microbundle build src/entry/*.ts -no-compress  --target node",
     "start": "NODE_ENV=development microbundle watch src/entry/*.ts -no-compress --target node",
-    "test": "jest",
+    "test": "rimraf __tests__/fixture/example/dist && jest",
     "lint": "xo --fix --prettier",
     "prepublish": "npm run build"
   },
