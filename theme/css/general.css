@@ -192,4 +192,5 @@ figure {
     padding: 5px;
     max-width: 70%;
     margin: auto;
+    width: fit-content;
 }
