@@ -288,21 +288,25 @@ class Book {
             if (id && index) {
                 this.referenceMap[id] = index;
             }
-        
+
             return getRenderer('image.hbs')({
                 alt,
                 caption,
                 url,
                 id,
+                index,
             });
           }
     }
 
     renderMarkdown(content: string) {
         const result = this.md?.render(content);
-        return result?.replace(/<a href=\"#(.*?)\"><\/a>/g, (_, g1) => {
+        return result?.replace(/<a href=\"#(.*?)\"><\/a>/g, (match, g1) => {
             const index = this.referenceMap[g1];
-            console.log(colors.yellow(`Can not found refernce with id: ${g1}`));
+            if (!index) {
+                console.log(colors.yellow(`Can not found refernce with id: ${g1}`));
+                return match;
+            }
             return `<a href="#${g1}">${index}</a>`;
         });
     }
