@@ -15,8 +15,6 @@ const options = {
     base: argv.b || '/',
 };
 
-console.log(options)
-
 if (action === 'start') {
 	new Book(options).start();
 } else if (action === 'build') {
