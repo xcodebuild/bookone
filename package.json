@@ -23,6 +23,7 @@
     "@types/minimist": "^1.2.2",
     "@types/shelljs": "^0.8.9",
     "@types/xo": "^0.39.1",
+    "cheerio": "^1.0.0-rc.10",
     "jest": "^27.3.1",
     "microbundle": "^0.14.1",
     "rimraf": "^3.0.2",

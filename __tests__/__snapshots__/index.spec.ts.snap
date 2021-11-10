@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CLI image cite 1`] = `"https://i.postimg.cc/0zQTZkZx/5436704-50.png#xcodebuild"`;
+
+exports[`CLI image cite 2`] = `"2-2"`;
+
+exports[`CLI image title will be display 1`] = `"/public/images/mock.png#mock"`;
+
+exports[`CLI image title will be display 2`] = `
+"Figure 2-1: 
+            Image Title
+        
+            Figure 2-2: 
+            Image Cite"
+`;
+
+exports[`CLI image url repect baseurl 1`] = `"/baseurl/public/images/mock.png#mock"`;
+
+exports[`CLI image url repect baseurl 2`] = `
+"Figure 2-1: 
+            Image Title"
+`;
+
+exports[`CLI public files copy to dist 1`] = `
+"console.log('mock js');
+"
+`;
