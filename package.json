@@ -1,6 +1,6 @@
 {
   "name": "bookone",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "main": "dist/index.js",
   "author": "me@xcodebuild.com",
   "license": "MIT",
@@ -19,8 +19,10 @@
     "@types/koa": "^2.13.4",
     "@types/koa-mount": "^4.0.1",
     "@types/koa-static": "^4.0.2",
+    "@types/lodash": "^4.14.176",
     "@types/markdown-it": "^12.2.3",
     "@types/minimist": "^1.2.2",
+    "@types/rimraf": "^3.0.2",
     "@types/shelljs": "^0.8.9",
     "@types/xo": "^0.39.1",
     "cheerio": "^1.0.0-rc.10",
@@ -46,9 +48,11 @@
     "koa": "^2.13.4",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
+    "lodash": "^4.17.21",
     "markdown-it": "^12.2.0",
     "minimist": "^1.2.5",
     "node-watch": "^0.7.2",
+    "ora": "5",
     "static-server": "^2.2.1"
   }
 }
