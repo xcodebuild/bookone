@@ -13,19 +13,7 @@ import mount from 'koa-mount';
 
 const THEME_DIR = path.join(__dirname, '../theme');
 
-const templateCache: Record<string, HandlebarsTemplateDelegate> = {};
-
-function getRenderer(name: string) {
-	if (templateCache[name]) {
-		return templateCache[name];
-	}
-
-	const tplPath = path.join(THEME_DIR, name);
-	const content = fs.readFileSync(tplPath, 'utf-8');
-	const result = Handlebars.compile(content);
-	templateCache[name] = result;
-	return result;
-}
+const warn = (msg: string) => console.log(`\n${colors.yellow(msg)}\n`);
 
 class Content {
 	children: Record<string, Content> = {};
@@ -131,10 +119,10 @@ class Content {
 			root: this.parent === null,
 		};
 		if (this.isLeaf) {
-			return getRenderer('section.hbs')(vars);
+			return this.book.getRenderer('section.hbs')(vars);
 		}
 
-		return getRenderer('chapter.hbs')(vars);
+		return this.book.getRenderer('chapter.hbs')(vars);
 	}
 
 	get outputPath() {
@@ -188,6 +176,24 @@ class Book {
 
 	entries: string[] = [];
 	content: Content = new Content('root', this.entryDirPath, null, this);
+
+	templateCache: Record<string, HandlebarsTemplateDelegate> = {};
+
+	getRenderer(name: string) {
+		if (this.templateCache[name]) {
+			return this.templateCache[name];
+		}
+		const userTplPath = path.join(this.entryDirPath, name);
+		const tplPath = path.join(THEME_DIR, name);
+		const userTplExisted = fs.existsSync(userTplPath);
+		if (userTplExisted) {
+			warn(`User template detected: ${userTplPath}`);
+		}
+		const content = fs.readFileSync(userTplExisted ? userTplPath : tplPath, 'utf-8');
+		const result = Handlebars.compile(content);
+		this.templateCache[name] = result;
+		return result;
+	}
 
     options = {
         defaultTheme: 'light',
@@ -294,13 +300,13 @@ class Book {
             let index = this.referenceMap[id];
             index = index || (caption ? Content.currentContent?.generateFigureIndex() : null) as string;
 
-			const indexString = index ? getRenderer('image-index.hbs')({ index }) : '';
+			const indexString = index ? this.getRenderer('image-index.hbs')({ index }) : '';
 
             if (id && index) {
                 this.referenceMap[id] = index;
             }
 
-            return getRenderer('image.hbs')({
+            return this.getRenderer('image.hbs')({
                 alt,
                 caption,
                 url,
@@ -315,10 +321,10 @@ class Book {
         return result?.replace(/<a href=\"#(.*?)\"><\/a>/g, (match, g1) => {
             const index = this.referenceMap[g1];
             if (!index) {
-                console.log(colors.yellow(`Can not found refernce with id: ${g1}`));
+				warn(`Can not found refernce with id: ${g1}`);
                 return match;
             }
-			const indexString = getRenderer('image-index.hbs')({ index });
+			const indexString = this.getRenderer('image-index.hbs')({ index });
             return `<a href="#${g1}">${indexString}</a>`;
         });
     }
