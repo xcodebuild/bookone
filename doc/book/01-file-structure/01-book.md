@@ -1,4 +1,4 @@
-## book
+# book
 
 The `book` is core directory for bookone, bookone organize chapter & section automatic by file structure, and get **title** from first markdown file.
 

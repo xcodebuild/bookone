@@ -48,7 +48,11 @@ class Content {
 	}
 
 	get index() {
-		return this.indexPath.join('.');
+		const indexPath = this.indexPath.slice(0);
+		if (indexPath[indexPath.length - 1] === 0) {
+			indexPath.pop();
+		}
+		return indexPath.length > 0 ? (indexPath.join('.') + '.') : '';
 	}
 
 	get title(): string {
@@ -166,7 +170,8 @@ class Content {
 
 	renderMarkdown() {
         Content.currentContent = this;
-        return this.book.renderMarkdown(this.getContent());
+		const content = this.getContent();
+        return this.book.renderMarkdown(content.replace(`# ${this.title}`, `# ${this.index} ${this.title}`));
 	}
 }
 
