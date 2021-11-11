@@ -25,12 +25,12 @@ Then cite them with
 [](#safari)
 ```
 
-It will be rendered as image index like `1-2`.
+It will be rendered as image index like `Figure 1-2`.
 
 ![image alt](https://i.postimg.cc/0zQTZkZx/5436704-50.png#xcodebuild "xcodebuild")
 
-For example this is a reference for above `Image Title` image: Figure [](#safari)
+For example this is a reference for above `Image Title` image: [](#safari)
 
-And this is a reference for `xcodebuild` image: Figure [](#xcodebuild)
+And this is a reference for `xcodebuild` image: [](#xcodebuild)
 
 > Tip: Index for image would be miss in `start` mode at the moment, but it should works well in `build` mode.

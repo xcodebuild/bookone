@@ -2,7 +2,7 @@
 
 exports[`CLI image cite 1`] = `"https://i.postimg.cc/0zQTZkZx/5436704-50.png#xcodebuild"`;
 
-exports[`CLI image cite 2`] = `"2-2"`;
+exports[`CLI image cite 2`] = `"Figure 2-2"`;
 
 exports[`CLI image title will be display 1`] = `"/public/images/mock.png#mock"`;
 

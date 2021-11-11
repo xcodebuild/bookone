@@ -294,6 +294,8 @@ class Book {
             let index = this.referenceMap[id];
             index = index || (caption ? Content.currentContent?.generateFigureIndex() : null) as string;
 
+			const indexString = index ? getRenderer('image-index.hbs')({ index }) : '';
+
             if (id && index) {
                 this.referenceMap[id] = index;
             }
@@ -303,7 +305,7 @@ class Book {
                 caption,
                 url,
                 id,
-                index,
+                index: indexString,
             });
           }
     }
@@ -316,7 +318,8 @@ class Book {
                 console.log(colors.yellow(`Can not found refernce with id: ${g1}`));
                 return match;
             }
-            return `<a href="#${g1}">${index}</a>`;
+			const indexString = getRenderer('image-index.hbs')({ index });
+            return `<a href="#${g1}">${indexString}</a>`;
         });
     }
 
