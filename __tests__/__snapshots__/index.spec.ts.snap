@@ -21,6 +21,8 @@ exports[`CLI image url repect baseurl 2`] = `
             Image Title"
 `;
 
+exports[`CLI internal link 1`] = `undefined`;
+
 exports[`CLI public files copy to dist 1`] = `
 "console.log('mock js');
 "

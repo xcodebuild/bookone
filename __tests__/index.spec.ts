@@ -78,4 +78,10 @@ describe('CLI', () => {
         expect($('[href="#xcodebuild"]').text().trim()).toMatchSnapshot();
     });
 
+    it('internal link', () => {
+        runWithArg(EXAMPLE_DIR, ['build', '-b', '/baseurl/']);
+        const content = readFileContent(path.join(EXAMPLE_DIST_DIR, 'chapter-two/link.html'));
+        const $ = cheerio.load(content);
+        expect($('a').attr('src')?.trim()).toMatchSnapshot();
+    });
 });

@@ -326,7 +326,7 @@ class Book {
     renderMarkdown(content: string) {
         const result = this.md?.render(content);
 		
-        const r1 = result?.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
+        let html = result?.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
             const index = this.referenceMap[g1];
             if (!index) {
 				warn(`Can not found refernce with id: ${g1}`);
@@ -334,9 +334,12 @@ class Book {
             }
 			const indexString = this.getRenderer('image-index.hbs')({ index });
             return `<a href="#${g1}">${indexString}</a>`;
-        });
+        })!;
 	
-		const r2 = result?.replace(/<a href=\"(.*?)\">.*?<\/a>/g, (match, g1) => {
+		html = html.replace(/<a href=\"(.*?)\">.*?<\/a>/g, (match, g1) => {
+			if (/^#/.test(g1) || /^http(s)?/.test(g1)) {
+				return match;
+			}
             const fullPath = path.join(this.entryDirPath, g1);
 			const targetContent = Content.pathToMap[fullPath];
 			if (!targetContent) {
@@ -345,7 +348,7 @@ class Book {
             return `<a href="${targetContent.relativePath}">${targetContent.indexTitle}</a>`;
         });
 
-		return r2;
+		return html;
     }
 
 	render() {
