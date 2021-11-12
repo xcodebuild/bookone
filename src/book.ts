@@ -166,7 +166,7 @@ class Content {
 	renderMarkdown() {
         Content.currentContent = this;
 		const content = this.getContent();
-        return this.book.renderMarkdown(content.replace(`# ${this.title}`, `# ${this.indexTitle}`));
+        return this.book.renderMarkdown(this);
 	}
 }
 
@@ -323,8 +323,9 @@ class Book {
 		};
     }
 
-    renderMarkdown(content: string) {
-        const result = this.md?.render(content);
+    renderMarkdown(content: Content) {
+		const str = content.getContent().replace(`# ${content.title}`, `# ${content.indexTitle}`)
+        const result = this.md?.render(str);
 		
         let html = result?.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
             const index = this.referenceMap[g1];
@@ -340,7 +341,7 @@ class Book {
 			if (/^#/.test(g1) || /^http(s)?/.test(g1)) {
 				return match;
 			}
-            const fullPath = path.join(this.entryDirPath, g1);
+            const fullPath = path.join(path.dirname(content.filePath), g1);
 			const targetContent = Content.pathToMap[fullPath];
 			if (!targetContent) {
 				return match;
