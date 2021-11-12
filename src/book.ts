@@ -435,12 +435,12 @@ class Book {
 
             const PORT = 8337;
             app.listen(PORT);
-            console.log('Server listening to', PORT);
+            console.log('\nServer listening to', PORT);
             console.log(`🚀 Open in browser: http://127.0.0.1:${PORT}${baseUrl}`);
         };
 
-		addTask('Start server', startServer);
         runTasks();
+		startServer();
 	}
 }
 
