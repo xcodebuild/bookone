@@ -22,6 +22,7 @@ class Content {
 	prev?: Content;
 
 	static currentContent?: Content;
+	static pathToMap: Record<string, Content> = {};
 
 	isLeaf = false;
 
@@ -59,6 +60,10 @@ class Content {
         return this.parent && !this.parent.parent;
     }
 
+	get indexTitle() {
+		return `${this.index} ${this.title}`;
+	}
+
     generateFigureIndex(): string {
         // index order by chapter
         if (this.isChapter) {
@@ -85,6 +90,8 @@ class Content {
 		if (!fs.isDirectorySync(filePath)) {
 			this.isLeaf = true;
 		}
+
+		Content.pathToMap[filePath] = this;
 	}
 
 	getContent() {
@@ -159,7 +166,7 @@ class Content {
 	renderMarkdown() {
         Content.currentContent = this;
 		const content = this.getContent();
-        return this.book.renderMarkdown(content.replace(`# ${this.title}`, `# ${this.index} ${this.title}`));
+        return this.book.renderMarkdown(content.replace(`# ${this.title}`, `# ${this.indexTitle}`));
 	}
 }
 
@@ -313,12 +320,13 @@ class Book {
                 id,
                 index: indexString,
             });
-          }
+		};
     }
 
     renderMarkdown(content: string) {
         const result = this.md?.render(content);
-        return result?.replace(/<a href=\"#(.*?)\"><\/a>/g, (match, g1) => {
+		
+        const r1 = result?.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
             const index = this.referenceMap[g1];
             if (!index) {
 				warn(`Can not found refernce with id: ${g1}`);
@@ -327,6 +335,17 @@ class Book {
 			const indexString = this.getRenderer('image-index.hbs')({ index });
             return `<a href="#${g1}">${indexString}</a>`;
         });
+	
+		const r2 = result?.replace(/<a href=\"(.*?)\">.*?<\/a>/g, (match, g1) => {
+            const fullPath = path.join(this.entryDirPath, g1);
+			const targetContent = Content.pathToMap[fullPath];
+			if (!targetContent) {
+				return match;
+			}
+            return `<a href="${targetContent.relativePath}">${targetContent.indexTitle}</a>`;
+        });
+
+		return r2;
     }
 
 	render() {
