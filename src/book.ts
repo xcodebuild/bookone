@@ -49,7 +49,7 @@ class Content {
 		if (this.isChapter) {
 			// logic for chapter
 			// chapter 1 start from first directory
-			const fisrtChapterIndex = this.parent?.childrenList.findIndex(item => !item.isLeaf)!;
+			const fisrtChapterIndex = this.book.fisrtChapterIndex;
 			const index = this.parent!.childrenList.indexOf(this);
 			if (index < fisrtChapterIndex) {
 				return '';
@@ -150,6 +150,7 @@ class Content {
 				: excludeChapterFisrtChildList(this)
 						.map((item) => item.generateTocHTML(options))
 						.join(''),
+			beforeFirstChapter: this.indexPath[0] < this.book.fisrtChapterIndex,
 			root: this.parent === null,
 		};
 		if (this.isLeaf) {
@@ -241,6 +242,14 @@ class Book {
     constructor(options: Record<string, any>) {
         Object.assign(this.options, options);
     }
+
+	get firstChapterContent() {
+		return this.content.childrenList.find(item => !item.isLeaf);
+	}
+
+	get fisrtChapterIndex() {
+		return this.content.childrenList.findIndex(item => !item.isLeaf);
+	}
 
 	get entryDirPath() {
 		return path.join(this.cwd, this.entryDir);
@@ -359,7 +368,12 @@ class Book {
         let html = this.md?.render(str)!;
 
 		html = html.replace(new RegExp(`<h1>${content.title}</h1>`), (match, g1) => {
-			return `<h1 id="${content.relativePath}" ${content.isChapterFirstChild ? ' class="chapter-title"': ''}>${content.indexTitle}</h1>`;
+			const isFirstChapter = content.isChapterFirstChild && (content.parent === this.firstChapterContent);
+			const classes = [
+				content.isChapterFirstChild && 'chapter-title',
+				isFirstChapter && 'chapter-first-chapter',
+			].filter(item => item).join(' ')
+			return `<h1 id="${content.relativePath}" class="${classes}">${content.indexTitle}</h1>`;
 		});
 		
         html = html.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
