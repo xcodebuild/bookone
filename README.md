@@ -6,3 +6,5 @@
 Zero configuration book genereator with Markdown.
 
 See document in [https://xcodebuild.github.io/bookone/index.html](https://xcodebuild.github.io/bookone/index.html)
+
+Build PDF file from this document for example: [Example PDF File](https://xcodebuild.github.io/bookone/book.pdf).

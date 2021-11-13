@@ -23,8 +23,15 @@ bookone start -t NewBook
 
 # build only
 bookone build -t NewBook
+
+# build with PDF
+bookone build -p
+# open dist/book.pdf to open book
 ```
 
+# Example PDF
+
+Build PDF file from this document for example: [Example PDF File](https://xcodebuild.github.io/bookone/book.pdf).
 # Related
 - default theme from [mdBook](https://github.com/rust-lang/mdBook).
 

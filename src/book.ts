@@ -40,7 +40,7 @@ class Content {
 
 	get isChapterFirstChild() {
 		const thisChildIndex = this.parent?.childrenList.indexOf(this);
-		return thisChildIndex === 0;
+		return thisChildIndex === 0 && this.parent?.isChapter;
 	}
 
 	get index(): string {
@@ -126,7 +126,12 @@ class Content {
 		return this.childrenList[0].relativePath;
 	}
 
-	generateTocHTML(): string {
+	generateTocHTML(options: {
+		print?: boolean,
+	} = {}): string {
+		const {
+			print = false,
+		} = options;
         const excludeChapterFisrtChildList = (content: Content) => {
             if (!content.parent) {
                 return content.childrenList;
@@ -135,13 +140,13 @@ class Content {
         }
 		const vars = {
 			title: this.title,
-			href: this.relativePath,
+			href: (print ? '#': '') + this.relativePath,
 			index: this.index,
 			// Skip first intro section
 			children: this.isLeaf
 				? null
 				: excludeChapterFisrtChildList(this)
-						.map((item) => item.generateTocHTML())
+						.map((item) => item.generateTocHTML(options))
 						.join(''),
 			root: this.parent === null,
 		};
@@ -352,7 +357,7 @@ class Book {
         let html = this.md?.render(str)!;
 
 		html = html.replace(new RegExp(`<h1>${content.title}</h1>`), (match, g1) => {
-			return `<h1 ${content.isChapterFirstChild ? ' class="chapter-title"': ''}>${content.indexTitle}</h1>`;
+			return `<h1 id="${content.relativePath}" ${content.isChapterFirstChild ? ' class="chapter-title"': ''}>${content.indexTitle}</h1>`;
 		});
 		
         html = html.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
@@ -457,6 +462,14 @@ class Book {
 	}
 
 	renderPDF() {
+
+		// toc
+		const tocHTMLs: string[] = [];
+		this.content.childrenList.forEach(child => {
+			tocHTMLs.push(child.generateTocHTML({ print: true }));
+		});
+		const toc = tocHTMLs.join('\n');
+
 		let cur: undefined | Content = this.content.childrenList[0];
 		if (!cur.isLeaf) {
 			cur = cur.childrenList[0];
@@ -479,8 +492,9 @@ class Book {
 			const htmlContent = htmls.join('\n');
 			const htmlTargetPath = path.join(this.outputDirPath, PDF_HTML_NAME);
 
-			const fullHTML = this.getRenderer('pdf.hbs')({
+		const fullHTML = this.getRenderer('print.hbs')({
 				content: htmlContent,
+				toc,
 			});
 			fs.writeFileSync(htmlTargetPath, fullHTML, 'utf-8');
 			this.startServer();

@@ -7,3 +7,4 @@
 | -j       | -j  public/a.js -j public/b.js      | array<string> or string | Additional Javascript |
 | -c       | -c  public/a.css -c public/b.css    | array<string> or string | Additional CSS        |
 | -b       | -b /bookone/                        | string                  | URL base              |
+| -p       | -p                                  | boolean                 | Build pdf output      |

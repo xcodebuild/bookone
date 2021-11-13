@@ -86,3 +86,66 @@ div.chapter, div.appendix {
     border-bottom: solid 1px gray;
     padding-bottom: 2px;
 }
+
+a {
+    color: black !important;
+}
+.toc {
+    border-top: solid 1px black;
+    border-bottom: solid 1px black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.toc li {
+    list-style: none;
+}
+
+
+.chapter-title {  
+    string-set: chapter_title content();
+}
+@page :left {
+    @top-left {
+      content: string(chapter_title);
+    }
+}
+
+@page :right {
+@top-right {
+    content: string(chapter_title);
+}
+}
+
+.toc a::after {
+    content: leader('.') target-counter(attr(href), page);
+}
+
+
+.toc a {
+    background-color: white;
+    padding-right: 10px;
+}
+
+.toc a::after {
+    content: target-counter(attr(href url), page);
+    position: absolute;
+    right: 15px;
+    background-color: white;
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.toc {
+    padding-left: 0px !important;
+}
+
+.toc li {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAALklEQVQYGWP8////fwYsgAmLGFgILPH9+3eGjIwMBg8PD4a3b98iJLDpYiTZDgC3Ow+/0jh1fQAAAABJRU5ErkJggg==") repeat-x center; 
+    margin-top: 5px;
+}
+
+* {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
+    color-adjust: exact !important;                 /*Firefox*/
+}
