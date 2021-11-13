@@ -74,7 +74,7 @@
                     <main>
                         <ul class="toc">
                             <li class="chapter-item expanded">
-    <a href="#/bookone/index.html">
+    <a href="#/bookone/index.html" class="before-first-chapter">
         <strong aria-hidden="true">
             
         </strong>
@@ -84,13 +84,13 @@
 </li>
 
     <li class="chapter-item expanded">
-        <a href="#/bookone/file-structure/intro.html">
+        <a href="#/bookone/file-structure/intro.html" class="">
             <strong aria-hidden="true">Chapter 1 </strong> File Structure
         </a>
     </li>
         <ol class="section">
             <li class="chapter-item expanded">
-    <a href="#/bookone/file-structure/book.html">
+    <a href="#/bookone/file-structure/book.html" class="">
         <strong aria-hidden="true">
             1.1
         </strong>
@@ -99,7 +99,7 @@
     
 </li>
 <li class="chapter-item expanded">
-    <a href="#/bookone/file-structure/public.html">
+    <a href="#/bookone/file-structure/public.html" class="">
         <strong aria-hidden="true">
             1.2
         </strong>
@@ -111,13 +111,13 @@
         </ol> 
 
     <li class="chapter-item expanded">
-        <a href="#/bookone/advanced/intro.html">
+        <a href="#/bookone/advanced/intro.html" class="">
             <strong aria-hidden="true">Chapter 2 </strong> Advanced
         </a>
     </li>
         <ol class="section">
             <li class="chapter-item expanded">
-    <a href="#/bookone/advanced/cli.html">
+    <a href="#/bookone/advanced/cli.html" class="">
         <strong aria-hidden="true">
             2.1
         </strong>
@@ -126,7 +126,7 @@
     
 </li>
 <li class="chapter-item expanded">
-    <a href="#/bookone/advanced/image.html">
+    <a href="#/bookone/advanced/image.html" class="">
         <strong aria-hidden="true">
             2.2
         </strong>
@@ -135,7 +135,7 @@
     
 </li>
 <li class="chapter-item expanded">
-    <a href="#/bookone/advanced/link.html">
+    <a href="#/bookone/advanced/link.html" class="">
         <strong aria-hidden="true">
             2.3
         </strong>
@@ -147,7 +147,7 @@
         </ol> 
 
                         </ul>
-                        <h1 id="/bookone/index.html" > bookone</h1>
+                        <h1 id="/bookone/index.html" class=""> bookone</h1>
 <p><a href="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml">    <img
         src="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml/badge.svg"
         alt="Test">
@@ -211,10 +211,10 @@ bookone build -p
 </figure>
 </p>
 
-<h1 id="/bookone/file-structure/intro.html"  class="chapter-title">Chapter 1 File Structure</h1>
+<h1 id="/bookone/file-structure/intro.html" class="chapter-title chapter-first-chapter">Chapter 1 File Structure</h1>
 <p>bookone organize chapter &amp; section automatic by file structure.</p>
 
-<h1 id="/bookone/file-structure/book.html" >1.1 book</h1>
+<h1 id="/bookone/file-structure/book.html" class="">1.1 book</h1>
 <p>The <code>book</code> is core directory for bookone, bookone organize chapter &amp; section automatic by file structure, and get <strong>title</strong> from first markdown file.</p>
 <p>We recommend use number prefix(for example <code>01-</code>) to keep order.</p>
 <pre><code class="language-js">├── book
@@ -226,13 +226,13 @@ bookone build -p
 │   └── 02-cli.md // chapter 2, get title from markdown
 </code></pre>
 
-<h1 id="/bookone/file-structure/public.html" >1.2 public</h1>
+<h1 id="/bookone/file-structure/public.html" class="">1.2 public</h1>
 <p>Files in <code>public</code> directory will be copyed to <code>dist</code>. We recommend put image in it.</p>
 
-<h1 id="/bookone/advanced/intro.html"  class="chapter-title">Chapter 2 Advanced</h1>
+<h1 id="/bookone/advanced/intro.html" class="chapter-title">Chapter 2 Advanced</h1>
 <p>Some advanced features.</p>
 
-<h1 id="/bookone/advanced/cli.html" >2.1 CLI</h1>
+<h1 id="/bookone/advanced/cli.html" class="">2.1 CLI</h1>
 <h2>Command line args</h2>
 <table>
 <thead>
@@ -283,7 +283,7 @@ bookone build -p
 </tbody>
 </table>
 
-<h1 id="/bookone/advanced/image.html" >2.2 Image</h1>
+<h1 id="/bookone/advanced/image.html" class="">2.2 Image</h1>
 <p>Bookone provide some features for image in book writing.</p>
 <h2>Image Title</h2>
 <p>Use first argument in image markup to display a title for image. And image with title will have index like <code>Figure 1-2</code>， it's ordered within Chapter.</p>
@@ -323,7 +323,7 @@ bookone build -p
 <p>Tip: Index for image would be miss in <code>start</code> mode at the moment, but it should works well in <code>build</code> mode.</p>
 </blockquote>
 
-<h1 id="/bookone/advanced/link.html" >2.3 Internal Link</h1>
+<h1 id="/bookone/advanced/link.html" class="">2.3 Internal Link</h1>
 <p>bookone support internal link to other Markdown file. It will rendered with its index and title.</p>
 <p>For example</p>
 <pre><code>This is a reference for [](./03-image.md)
