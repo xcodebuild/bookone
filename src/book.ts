@@ -11,7 +11,8 @@ import koa from 'koa';
 import koaStatic from 'koa-static';
 import mount from 'koa-mount';
 import gracefulShutdown from 'http-graceful-shutdown';
-import RenderPDF from 'chrome-headless-render-pdf';
+import { renderPDF } from './render-pdf';
+
 
 const THEME_DIR = path.join(__dirname, '../theme');
 
@@ -489,25 +490,24 @@ class Book {
 		const PDF_HTML_NAME = 'bookone_output_pdf.html';
 		const pdfTargetPath = path.join(this.outputDirPath, 'book.pdf');
 
-		addTask(`Building PDF: ${colors.green(pdfTargetPath)}, this step maybe slow, please waiting`, () => {
+		addTask(`Building PDF: ${colors.green(pdfTargetPath)}, this step maybe slow, please waiting`, async () => {
 			const htmlContent = htmls.join('\n');
 			const htmlTargetPath = path.join(this.outputDirPath, PDF_HTML_NAME);
 
-		const fullHTML = this.getRenderer('print.hbs')({
-				content: htmlContent,
-				toc,
+			const fullHTML = this.getRenderer('print.hbs')({
+					content: htmlContent,
+					toc,
 			});
 			fs.writeFileSync(htmlTargetPath, fullHTML, 'utf-8');
-			this.startServer();
-			return RenderPDF.generateSinglePdf(this.serverUrl + PDF_HTML_NAME, pdfTargetPath).then(() => {
-				return this.stopServer();
-			});
+			await this.startServer();
+			await renderPDF(this.serverUrl + PDF_HTML_NAME, pdfTargetPath);
+			await this.stopServer();
 		});
 
-		addTask(`Build PDF DONE`, () => {
-			// do nothing
-		});
-	}
+	addTask(`Build PDF DONE`, () => {
+		// do nothing
+	});
+}
 
 	private stopServer() {
 		gracefulShutdown(this.koaApp);
