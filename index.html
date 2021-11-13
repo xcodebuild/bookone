@@ -191,7 +191,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1  class="chapter-title"> bookone</h1>
+                        <h1 id="/bookone/index.html" > bookone</h1>
 <p><a href="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml">    <img
         src="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml/badge.svg"
         alt="Test">
@@ -222,7 +222,13 @@ bookone start -t NewBook
 
 # build only
 bookone build -t NewBook
+
+# build with PDF
+bookone build -p
+# open dist/book.pdf to open book
 </code></pre>
+<h1>Example PDF</h1>
+<p>Build PDF file from this document for example: <a href="https://xcodebuild.github.io/bookone/book.pdf">Example PDF File</a>.</p>
 <h1>Related</h1>
 <ul>
 <li>default theme from <a href="https://github.com/rust-lang/mdBook">mdBook</a>.</li>
