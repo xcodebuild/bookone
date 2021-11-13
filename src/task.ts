@@ -2,10 +2,13 @@ import colors from 'colors';
 import { throttle } from 'lodash';
 import watch from 'node-watch';
 
+
 const tasks: Array<{
 	text: string;
 	run: () => void;
 }> = [];
+
+const warns: string[] = [];
 
 let isWatchMode = false;
 
@@ -30,9 +33,6 @@ export function addTask(text: string, run: () => void, listenFile?: string[]) {
     }
 }
 
-let spinner: any;
-
-
 export const runTasks = async () => {
 
     const length = tasks.length;
@@ -44,8 +44,18 @@ export const runTasks = async () => {
         console.log(text);
         await task?.run();
     }
+
+    while(warns.length > 0) {
+        const warn = warns.shift() as string;
+        console.log(colors.yellow(warn));
+    } 
 }
 
 const runTasksLazy = throttle(() => new Promise(resolve => {
     resolve(runTasks());
 }), 100);
+
+
+export function logWarn(msg: string) {
+    warns.push(msg);
+}

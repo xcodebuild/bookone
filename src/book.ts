@@ -6,7 +6,7 @@ import MarkdownIt from 'markdown-it';
 import Handlebars from 'handlebars';
 import colors from 'colors';
 import {addTask, runTasks, setWatchMode} from './task';
-import {readTitleFromMarkdown} from './utils';
+import {logWarn} from './task';
 import koa from 'koa';
 import koaStatic from 'koa-static';
 import mount from 'koa-mount';
@@ -14,8 +14,6 @@ import gracefulShutdown from 'http-graceful-shutdown';
 import RenderPDF from 'chrome-headless-render-pdf';
 
 const THEME_DIR = path.join(__dirname, '../theme');
-
-const warn = (msg: string) => console.log(`\n${colors.yellow(msg)}\n`);
 
 class Content {
 	children: Record<string, Content> = {};
@@ -66,11 +64,14 @@ class Content {
 
 	get title(): string {
 		if (this.isLeaf) {
-            try {
-                return readTitleFromMarkdown(this.getContent());
-            } catch (e) {
-                return this.name;
-            }
+			const content = this.getContent();
+			const REGEX_TITLE = /#+ (.+)/;
+			const result = REGEX_TITLE.exec(content);
+			if (result && result.length > 0 && !/##/.test(result[0])) {
+				return result[1];
+			}
+			logWarn(`Markdown should start with a # Title: ${this.filePath}`);
+			return this.name;
 		}
 
 		return this.childrenList[0].title;
@@ -222,7 +223,7 @@ class Book {
 		const tplPath = path.join(THEME_DIR, name);
 		const userTplExisted = fs.existsSync(userTplPath);
 		if (userTplExisted) {
-			warn(`User template detected: ${userTplPath}`);
+			logWarn(`User template detected: ${userTplPath}`);
 		}
 		const content = fs.readFileSync(userTplExisted ? userTplPath : tplPath, 'utf-8');
 		const result = Handlebars.compile(content);
@@ -363,7 +364,7 @@ class Book {
         html = html.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
             const index = this.referenceMap[g1];
             if (!index) {
-				warn(`Can not found refernce with id: ${g1}`);
+				logWarn(`Can not found refernce with id: ${g1}`);
                 return match;
             }
 			const indexString = this.getRenderer('image-index.hbs')({ index });
@@ -488,7 +489,7 @@ class Book {
 		const PDF_HTML_NAME = 'bookone_output_pdf.html';
 		const pdfTargetPath = path.join(this.outputDirPath, 'book.pdf');
 
-		addTask(`Building PDF: ${pdfTargetPath}, this step maybe slow, please waiting`, () => {
+		addTask(`Building PDF: ${colors.green(pdfTargetPath)}, this step maybe slow, please waiting`, () => {
 			const htmlContent = htmls.join('\n');
 			const htmlTargetPath = path.join(this.outputDirPath, PDF_HTML_NAME);
 
