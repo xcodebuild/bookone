@@ -1,0 +1,351 @@
+<!DOCTYPE HTML>
+<html lang="" class="sidebar-visible no-js ">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title></title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <script src="./paged.polyfill.js"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var pathToRoot = "";
+            var defaultTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "" : "";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = defaultTheme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="content" class="content">
+                    <main>
+                        <ul class="toc">
+                            <li class="chapter-item expanded">
+    <a href="#/bookone/index.html">
+        <strong aria-hidden="true">
+            
+        </strong>
+        bookone
+    </a>
+    
+</li>
+
+    <li class="chapter-item expanded">
+        <a href="#/bookone/file-structure/intro.html">
+            <strong aria-hidden="true">Chapter 1 </strong> File Structure
+        </a>
+    </li>
+        <ol class="section">
+            <li class="chapter-item expanded">
+    <a href="#/bookone/file-structure/book.html">
+        <strong aria-hidden="true">
+            1.1
+        </strong>
+        book
+    </a>
+    
+</li>
+<li class="chapter-item expanded">
+    <a href="#/bookone/file-structure/public.html">
+        <strong aria-hidden="true">
+            1.2
+        </strong>
+        public
+    </a>
+    
+</li>
+
+        </ol> 
+
+    <li class="chapter-item expanded">
+        <a href="#/bookone/advanced/intro.html">
+            <strong aria-hidden="true">Chapter 2 </strong> Advanced
+        </a>
+    </li>
+        <ol class="section">
+            <li class="chapter-item expanded">
+    <a href="#/bookone/advanced/cli.html">
+        <strong aria-hidden="true">
+            2.1
+        </strong>
+        CLI
+    </a>
+    
+</li>
+<li class="chapter-item expanded">
+    <a href="#/bookone/advanced/image.html">
+        <strong aria-hidden="true">
+            2.2
+        </strong>
+        Image
+    </a>
+    
+</li>
+<li class="chapter-item expanded">
+    <a href="#/bookone/advanced/link.html">
+        <strong aria-hidden="true">
+            2.3
+        </strong>
+        Internal Link
+    </a>
+    
+</li>
+
+        </ol> 
+
+                        </ul>
+                        <h1 id="/bookone/index.html" > bookone</h1>
+<p><a href="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml">    <img
+        src="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml/badge.svg"
+        alt="Test">
+</a>
+<a href="https://codecov.io/gh/xcodebuild/bookone">    <img
+        src="https://codecov.io/gh/xcodebuild/bookone/branch/master/graph/badge.svg?token&#x3D;sTOg3X4r6V"
+        alt="codecov">
+</a>
+<a href="https://xcodebuild.github.io/bookone/index.html">    <img
+        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url&#x3D;https://xcodebuild.github.io/bookone/index.html"
+        alt="Hits">
+</a><br>
+Zero configuration book genereator with Markdown.</p>
+<h1>Github</h1>
+<p><a href="https://github.com/xcodebuild/bookone">https://github.com/xcodebuild/bookone</a></p>
+<h2>Usage</h2>
+<pre><code># install bookone
+npm install -g bookone
+
+# init a book
+mkdir -p newbook/book
+cd newbook
+echo '# Intro Title\n I am content' &gt; book/00-index.md
+echo '# Chapter 1\n I am content of chapter 1' &gt; book/01-chapter-one.md
+
+# start a server and watch change
+bookone start -t NewBook
+
+# build only
+bookone build -t NewBook
+
+# build with PDF
+bookone build -p
+# open dist/book.pdf to open book
+</code></pre>
+<h1>Example PDF</h1>
+<p>Build PDF file from this document for example: <a href="https://xcodebuild.github.io/bookone/book.pdf">Example PDF File</a>.</p>
+<h1>Related</h1>
+<ul>
+<li>default theme from <a href="https://github.com/rust-lang/mdBook">mdBook</a>.</li>
+</ul>
+<h1>Screenshot</h1>
+<p><figure >
+    <img
+        src="/bookone/public/images/safari.png"
+        alt="">
+        <figcaption>
+            <strong>Figure 0-3: </strong>
+            Preview in Browser
+        </figcaption>
+</figure>
+
+<figure >
+    <img
+        src="/bookone/public/images/terminal.png"
+        alt="">
+        <figcaption>
+            <strong>Figure 0-4: </strong>
+            bookone in Terminal
+        </figcaption>
+</figure>
+</p>
+
+<h1 id="/bookone/file-structure/intro.html"  class="chapter-title">Chapter 1 File Structure</h1>
+<p>bookone organize chapter &amp; section automatic by file structure.</p>
+
+<h1 id="/bookone/file-structure/book.html" >1.1 book</h1>
+<p>The <code>book</code> is core directory for bookone, bookone organize chapter &amp; section automatic by file structure, and get <strong>title</strong> from first markdown file.</p>
+<p>We recommend use number prefix(for example <code>01-</code>) to keep order.</p>
+<pre><code class="language-js">├── book
+│   ├── 00-index.md // landing page of this book
+│   ├── 01-file-structure // chapter 1                        &lt;-----------------|
+│   │   ├── 00-intro.md // Title &amp; content in this markdown will be used here --|
+│   │   ├── 01-book.md  // first section in chapter
+│   │   └── 02-public.md
+│   └── 02-cli.md // chapter 2, get title from markdown
+</code></pre>
+
+<h1 id="/bookone/file-structure/public.html" >1.2 public</h1>
+<p>Files in <code>public</code> directory will be copyed to <code>dist</code>. We recommend put image in it.</p>
+
+<h1 id="/bookone/advanced/intro.html"  class="chapter-title">Chapter 2 Advanced</h1>
+<p>Some advanced features.</p>
+
+<h1 id="/bookone/advanced/cli.html" >2.1 CLI</h1>
+<h2>Command line args</h2>
+<table>
+<thead>
+<tr>
+<th>argument</th>
+<th>example</th>
+<th>type</th>
+<th>means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-t</td>
+<td>-t Title</td>
+<td>string</td>
+<td>Title</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>-t Author</td>
+<td>string</td>
+<td>Arthour</td>
+</tr>
+<tr>
+<td>-j</td>
+<td>-j  public/a.js -j public/b.js</td>
+<td>array&lt;string&gt; or string</td>
+<td>Additional Javascript</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>-c  public/a.css -c public/b.css</td>
+<td>array&lt;string&gt; or string</td>
+<td>Additional CSS</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>-b /bookone/</td>
+<td>string</td>
+<td>URL base</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>-p</td>
+<td>boolean</td>
+<td>Build pdf output</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="/bookone/advanced/image.html" >2.2 Image</h1>
+<p>Bookone provide some features for image in book writing.</p>
+<h2>Image Title</h2>
+<p>Use first argument in image markup to display a title for image. And image with title will have index like <code>Figure 1-2</code>， it's ordered within Chapter.</p>
+<pre><code class="language-markdown">![image alt](../public/images/safari.png &quot;Image Title&quot;)
+</code></pre>
+<p><figure id="safari">
+    <img
+        src="/bookone/public/images/safari.png#safari"
+        alt="image alt">
+        <figcaption>
+            <strong>Figure 2-1: </strong>
+            Image Title
+        </figcaption>
+</figure>
+</p>
+<h2>Cite Image</h2>
+<p>You can give id to image with <code>#</code> in url.</p>
+<pre><code class="language-markdown">![image alt](../../doc/public/images/safari.png#safari &quot;Image Title&quot;)
+</code></pre>
+<p>Then cite them with</p>
+<pre><code class="language-markdown">[](#safari)
+</code></pre>
+<p>It will be rendered as image index like <code>Figure 1-2</code>.</p>
+<p><figure id="xcodebuild">
+    <img
+        src="https://i.postimg.cc/0zQTZkZx/5436704-50.png#xcodebuild"
+        alt="image alt">
+        <figcaption>
+            <strong>Figure 2-2: </strong>
+            xcodebuild
+        </figcaption>
+</figure>
+</p>
+<p>For example this is a reference for above <code>Image Title</code> image: <a href="#safari">Figure 2-1</a></p>
+<p>And this is a reference for <code>xcodebuild</code> image: <a href="#xcodebuild">Figure 2-2</a></p>
+<blockquote>
+<p>Tip: Index for image would be miss in <code>start</code> mode at the moment, but it should works well in <code>build</code> mode.</p>
+</blockquote>
+
+<h1 id="/bookone/advanced/link.html" >2.3 Internal Link</h1>
+<p>bookone support internal link to other Markdown file. It will rendered with its index and title.</p>
+<p>For example</p>
+<pre><code>This is a reference for [](./03-image.md)
+</code></pre>
+<p>This is a reference for <a href="./03-image.md"></a></p>
+
+                    </main>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
