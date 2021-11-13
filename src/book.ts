@@ -10,6 +10,8 @@ import {readTitleFromMarkdown} from './utils';
 import koa from 'koa';
 import koaStatic from 'koa-static';
 import mount from 'koa-mount';
+import gracefulShutdown from 'http-graceful-shutdown';
+import RenderPDF from 'chrome-headless-render-pdf';
 
 const THEME_DIR = path.join(__dirname, '../theme');
 
@@ -36,12 +38,30 @@ class Content {
 		return this.parent.indexPath.concat(this.parent.childrenList.indexOf(this));
 	}
 
-	get index() {
+	get isChapterFirstChild() {
+		const thisChildIndex = this.parent?.childrenList.indexOf(this);
+		return thisChildIndex === 0;
+	}
+
+	get index(): string {
+		if (this.isChapterFirstChild) {
+			return this.parent?.index!;
+		}
+		if (this.isChapter) {
+			// logic for chapter
+			// chapter 1 start from first directory
+			const fisrtChapterIndex = this.parent?.childrenList.findIndex(item => !item.isLeaf)!;
+			const index = this.parent!.childrenList.indexOf(this);
+			if (index < fisrtChapterIndex) {
+				return '';
+			}
+			return this.book.getRenderer('chapter.hbs')({ index: index - fisrtChapterIndex + 1 });
+		}
 		const indexPath = this.indexPath.slice(0);
 		if (indexPath[indexPath.length - 1] === 0) {
 			indexPath.pop();
 		}
-		return indexPath.length > 0 ? (indexPath.join('.') + '.') : '';
+		return indexPath.length > 0 ? indexPath.join('.') : '';
 	}
 
 	get title(): string {
@@ -126,10 +146,10 @@ class Content {
 			root: this.parent === null,
 		};
 		if (this.isLeaf) {
-			return this.book.getRenderer('section.hbs')(vars);
+			return this.book.getRenderer('sidebar-section.hbs')(vars);
 		}
 
-		return this.book.getRenderer('chapter.hbs')(vars);
+		return this.book.getRenderer('sidebar-chapter.hbs')(vars);
 	}
 
 	get outputPath() {
@@ -177,6 +197,9 @@ class Book {
 	publicDir = 'public';
     md: MarkdownIt | null = null;
 
+	serverUrl: string = '';
+	koaApp?: koa;
+
     referenceMap: Record<string, string> = {};
 
 	template?: HandlebarsTemplateDelegate;
@@ -205,6 +228,7 @@ class Book {
     options = {
         defaultTheme: 'light',
         base: '/',
+		buildPDF: false,
     };
 
     constructor(options: Record<string, any>) {
@@ -324,10 +348,14 @@ class Book {
     }
 
     renderMarkdown(content: Content) {
-		const str = content.getContent().replace(`# ${content.title}`, `# ${content.indexTitle}`)
-        const result = this.md?.render(str);
+		const str = content.getContent();
+        let html = this.md?.render(str)!;
+
+		html = html.replace(new RegExp(`<h1>${content.title}</h1>`), (match, g1) => {
+			return `<h1 ${content.isChapterFirstChild ? ' class="chapter-title"': ''}>${content.indexTitle}</h1>`;
+		});
 		
-        let html = result?.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
+        html = html.replace(/<a href=\"#(.*?)\">.*?<\/a>/g, (match, g1) => {
             const index = this.referenceMap[g1];
             if (!index) {
 				warn(`Can not found refernce with id: ${g1}`);
@@ -402,45 +430,99 @@ class Book {
 		renderContent(this.content);
 	}
 
-	start() {
+	async start() {
         setWatchMode();
 		this.scanFiles();
 		this.initTheme();
 		this.render();
 		this.initPublic();
-		this.initServer();
+		await this.initServer();
 	}
 
-	build() {
+	async build() {
 		this.scanFiles();
 		this.initTheme();
 		this.render();
 		this.initPublic();
-        runTasks();
+
+		const buildPDF = this.getConfig().buildPDF;
+		if (buildPDF) {
+			this.renderPDF();
+		}
+        await runTasks();
         console.log(colors.green('🚀 Build DONE!'));
+		if (buildPDF) {
+			process.exit(0);
+		}
 	}
 
-	initServer() {
-        const startServer = () => {
-            const app = new koa();
+	renderPDF() {
+		let cur: undefined | Content = this.content.childrenList[0];
+		if (!cur.isLeaf) {
+			cur = cur.childrenList[0];
+		}
 
-            const baseApp = new koa();
-            baseApp.use(koaStatic(this.outputDirPath));
+		const htmls: string[] = [];
+		while (cur) {
+			const target = cur;
+			if (cur.isLeaf) {
+				addTask(`Rendering PDF from file ${target.filePath}`, () => {
+					htmls.push(target.renderMarkdown());
+				});
+			}
+			cur = cur.next;
+		}
+		const PDF_HTML_NAME = 'bookone_output_pdf.html';
+		const pdfTargetPath = path.join(this.outputDirPath, 'book.pdf');
 
-            const baseUrl = this.getConfig().base;
-            if (baseUrl === '/') {
-                app.use(koaStatic(this.outputDirPath));
-            }
-            app.use(mount(baseUrl, baseApp));
+		addTask(`Building PDF: ${pdfTargetPath}, this step maybe slow, please waiting`, () => {
+			const htmlContent = htmls.join('\n');
+			const htmlTargetPath = path.join(this.outputDirPath, PDF_HTML_NAME);
 
-            const PORT = 8337;
-            app.listen(PORT);
-            console.log('\nServer listening to', PORT);
-            console.log(`🚀 Open in browser: http://127.0.0.1:${PORT}${baseUrl}`);
-        };
+			const fullHTML = this.getRenderer('pdf.hbs')({
+				content: htmlContent,
+			});
+			fs.writeFileSync(htmlTargetPath, fullHTML, 'utf-8');
+			this.startServer();
+			return RenderPDF.generateSinglePdf(this.serverUrl + PDF_HTML_NAME, pdfTargetPath).then(() => {
+				return this.stopServer();
+			});
+		});
 
-        runTasks();
-		startServer();
+		addTask(`Build PDF DONE`, () => {
+			// do nothing
+		});
+	}
+
+	private stopServer() {
+		gracefulShutdown(this.koaApp);
+	}
+
+	private startServer() {
+		this.koaApp = new koa();
+
+		const app = this.koaApp;
+		const baseApp = new koa();
+		baseApp.use(koaStatic(this.outputDirPath));
+
+		const baseUrl = this.getConfig().base;
+		if (baseUrl === '/') {
+			app.use(koaStatic(this.outputDirPath));
+		}
+		app.use(mount(baseUrl, baseApp));
+
+		const PORT = 8337;
+		app.listen(PORT);
+		const url = `http://127.0.0.1:${PORT}${baseUrl}`;
+		this.serverUrl = url;
+		
+		return url;
+	}
+
+	async initServer() {
+        await runTasks();
+        this.startServer();
+		console.log(`🚀 Open in browser: ${this.serverUrl}`);
 	}
 }
 

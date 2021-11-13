@@ -6,6 +6,10 @@
     display: none;
 }
 
+.page {
+    margin-top: 0;
+}
+
 #page-wrapper.page-wrapper {
     transform: none;
     margin-left: 0px;
@@ -23,7 +27,7 @@
 }
 
 code {
-    background-color: #666666;
+    background-color: #e1e1e1;
     border-radius: 5px;
 
     /* Force background to be printed in Chrome */
@@ -51,4 +55,34 @@ pre, code {
 
 .fa {
     display: none !important;
+}
+
+figure {
+    page-break-inside: avoid;
+}
+
+/* for print */
+
+@page {
+    size: A4;
+}
+
+div.chapter, div.appendix {
+    page-break-after: always;
+}
+
+@page :left {
+    @bottom-left {
+      content: counter(page);
+    }
+}
+@page front-matter :left {
+    @bottom-left {
+      content: counter(page, lower-roman);
+    }
+}
+
+.chapter-title {
+    border-bottom: solid 1px gray;
+    padding-bottom: 2px;
 }

@@ -36,15 +36,6 @@ h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
 .hide-boring .boring { display: none; }
 .hidden { display: none !important; }
 
-h2, h3 { margin-top: 2.5em; }
-h4, h5 { margin-top: 2em; }
-
-.header + .header h3,
-.header + .header h4,
-.header + .header h5 {
-    margin-top: 1em;
-}
-
 h1:target::before,
 h2:target::before,
 h3:target::before,
@@ -193,4 +184,5 @@ figure {
     max-width: 70%;
     margin: auto;
     width: fit-content;
+    margin-top: 5px;
 }

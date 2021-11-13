@@ -25,10 +25,10 @@ bookone start -t NewBook
 bookone build -t NewBook
 ```
 
-# Screenshot
-![](../public/images/safari.png)
-![](../public/images/terminal.png)
-
 # Related
 - default theme from [mdBook](https://github.com/rust-lang/mdBook).
+
+# Screenshot
+![](../public/images/safari.png "Preview in Browser")
+![](../public/images/terminal.png "bookone in Terminal")
 

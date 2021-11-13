@@ -1,7 +1,6 @@
 import colors from 'colors';
 import { throttle } from 'lodash';
 import watch from 'node-watch';
-import ora from 'ora';
 
 const tasks: Array<{
 	text: string;
@@ -36,27 +35,17 @@ let spinner: any;
 
 export const runTasks = async () => {
 
-    spinner = ora('Starting').start();
     const length = tasks.length;
-    spinner.color = 'yellow';
 
     while (tasks.length > 0) {
         const task = tasks.shift();
-        const text = `[${colors.green(
-            String(length - tasks.length) + ' DONE',
-        )}/${length} TOTAL] ${task?.text}`;
-        spinner.text = text;
-        spinner.render();
-        task?.run();
-    }
-
-    spinner.color = 'green';
-
-    if (!isWatchMode) {
-        spinner.stop();
-    } else {
-        spinner.text = 'Keep watching for change';
+        const percent = Math.floor((length - tasks.length)/length * 100);
+        const text = `[${colors.green(''+percent + '%')}] ${task?.text}`;
+        console.log(text);
+        await task?.run();
     }
 }
 
-const runTasksLazy = throttle(runTasks, 100);
+const runTasksLazy = throttle(() => new Promise(resolve => {
+    resolve(runTasks());
+}), 100);

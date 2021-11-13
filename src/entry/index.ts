@@ -13,23 +13,29 @@ const options = {
     additionalJs: normalizeArray(argv.j),
     additionalCss: normalizeArray(argv.c),
     base: argv.b || '/',
+    buildPDF: argv.p || false,
 };
 
-if (action === 'start') {
-	new Book(options).start();
-} else if (action === 'build') {
-	new Book(options).build();
-} else {
-	console.log(`bookone - Zero configuration book genereator with Markdown.
-https://xcodebuild.github.io/bookone/
-
-bookone start - Start a dev server
-bookone build - Build book
-[arguments]
-    -t Title
-    -a Author
-    -b Base url
-    -j Additional JavaScript in webpage
-    -c Additional CSS in webpage
-`);
+export function run() {
+    if (action === 'start') {
+        return new Book(options).start();
+    } else if (action === 'build') {
+        return new Book(options).build();
+    } else {
+        console.log(`bookone - Zero configuration book genereator with Markdown.
+    https://xcodebuild.github.io/bookone/
+    
+    bookone start - Start a dev server
+    bookone build - Build book
+    [arguments]
+        -t Title
+        -a Author
+        -b Base url
+        -j Additional JavaScript in webpage
+        -c Additional CSS in webpage
+        -p Build PDF book, only works in build 
+    `);
+    }
 }
+
+run();

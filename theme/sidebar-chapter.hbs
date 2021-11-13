@@ -1,0 +1,16 @@
+{{#if root}}
+<ol class="chapter">
+    {{{ children }}}
+</ol>
+{{else}}
+    <li class="chapter-item expanded">
+        <a href="{{{ href }}}">
+            <strong aria-hidden="true">{{{ index }}} </strong> {{{ title }}}
+        </a>
+    </li>
+    {{#if children}}
+        <ol class="section">
+            {{{ children }}}
+        </ol> 
+    {{/if}}
+{{/if}}
