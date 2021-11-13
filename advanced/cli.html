@@ -191,73 +191,60 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1  class="chapter-title"> bookone</h1>
-<p><a href="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml">    <img
-        src="https://github.com/xcodebuild/bookone/actions/workflows/publish.yml/badge.svg"
-        alt="Test">
-</a>
-<a href="https://codecov.io/gh/xcodebuild/bookone">    <img
-        src="https://codecov.io/gh/xcodebuild/bookone/branch/master/graph/badge.svg?token&#x3D;sTOg3X4r6V"
-        alt="codecov">
-</a>
-<a href="https://xcodebuild.github.io/bookone/index.html">    <img
-        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url&#x3D;https://xcodebuild.github.io/bookone/index.html"
-        alt="Hits">
-</a><br>
-Zero configuration book genereator with Markdown.</p>
-<h1>Github</h1>
-<p><a href="https://github.com/xcodebuild/bookone">https://github.com/xcodebuild/bookone</a></p>
-<h2>Usage</h2>
-<pre><code># install bookone
-npm install -g bookone
-
-# init a book
-mkdir -p newbook/book
-cd newbook
-echo '# Intro Title\n I am content' &gt; book/00-index.md
-echo '# Chapter 1\n I am content of chapter 1' &gt; book/01-chapter-one.md
-
-# start a server and watch change
-bookone start -t NewBook
-
-# build only
-bookone build -t NewBook
-</code></pre>
-<h1>Related</h1>
-<ul>
-<li>default theme from <a href="https://github.com/rust-lang/mdBook">mdBook</a>.</li>
-</ul>
-<h1>Screenshot</h1>
-<p><figure >
-    <img
-        src="/bookone/public/images/safari.png"
-        alt="">
-        <figcaption>
-            <strong>Figure 0-1: </strong>
-            Preview in Browser
-        </figcaption>
-</figure>
-
-<figure >
-    <img
-        src="/bookone/public/images/terminal.png"
-        alt="">
-        <figcaption>
-            <strong>Figure 0-2: </strong>
-            bookone in Terminal
-        </figcaption>
-</figure>
-</p>
+                        <h1 >2.1 CLI</h1>
+<h2>Command line args</h2>
+<table>
+<thead>
+<tr>
+<th>argument</th>
+<th>example</th>
+<th>type</th>
+<th>means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-t</td>
+<td>-t Title</td>
+<td>string</td>
+<td>Title</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>-t Author</td>
+<td>string</td>
+<td>Arthour</td>
+</tr>
+<tr>
+<td>-j</td>
+<td>-j  public/a.js -j public/b.js</td>
+<td>array&lt;string&gt; or string</td>
+<td>Additional Javascript</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>-c  public/a.css -c public/b.css</td>
+<td>array&lt;string&gt; or string</td>
+<td>Additional CSS</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>-b /bookone/</td>
+<td>string</td>
+<td>URL base</td>
+</tr>
+</tbody>
+</table>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="/bookone/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="/bookone/advanced/intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="/bookone/file-structure/intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="/bookone/advanced/image.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -267,11 +254,11 @@ bookone build -t NewBook
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="/bookone/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="/bookone/advanced/intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="/bookone/file-structure/intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="/bookone/advanced/image.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
