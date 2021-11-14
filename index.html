@@ -295,6 +295,14 @@ bookone build -p
         <!-- Custom JS scripts -->
         <script type="text/javascript" src="/bookone/"></script>
 
+        <script type="text/javascript">
+        window.addEventListener('load', () => {
+            const query = `#sidebar a[href="${location.pathname}"]`;
+            const item = document.querySelector(query);
+            item.classList.add('active');
+            item.scrollIntoView();
+        });
+        </script>
 
     </body>
 </html>
