@@ -370,7 +370,7 @@ class Book {
 		html = html.replace(new RegExp(`<h1>${content.title}</h1>`), (match, g1) => {
 			const isFirstChapter = content.isChapterFirstChild && (content.parent === this.firstChapterContent);
 			const classes = [
-				content.isChapterFirstChild && 'chapter-title',
+				(content.isChapterFirstChild || content.isChapter) && 'chapter-title',
 				isFirstChapter && 'chapter-first-chapter',
 			].filter(item => item).join(' ')
 			return `<h1 id="${content.relativePath}" class="${classes}">${content.indexTitle}</h1>`;
