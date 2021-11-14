@@ -103,10 +103,11 @@ a {
     counter-reset: page 1;
 }
 
-
 .chapter-title {  
     string-set: chapter_title content();
+    page-break-before: always;
 }
+
 @page :left {
     @top-left {
       content: string(chapter_title);
