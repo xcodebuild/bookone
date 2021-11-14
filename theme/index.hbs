@@ -271,23 +271,14 @@
         <script type="text/javascript" src="{{ ../pathToRoot }}{{this}}"></script>
         {{/each}}
 
-        {{#if isPrint}}
-        {{#if mathjaxSupport}}
         <script type="text/javascript">
-        window.addEventListener('load', function() {
-            MathJax.Hub.Register.StartupHook('End', function() {
-                window.setTimeout(window.print, 100);
-            });
+        window.addEventListener('load', () => {
+            const query = `#sidebar a[href="${location.pathname}"]`;
+            const item = document.querySelector(query);
+            item.classList.add('active');
+            item.scrollIntoView();
         });
         </script>
-        {{else}}
-        <script type="text/javascript">
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
-        {{/if}}
-        {{/if}}
 
     </body>
 </html>
