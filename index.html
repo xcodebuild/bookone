@@ -300,7 +300,12 @@ bookone build -p
             const query = `#sidebar a[href="${location.pathname}"]`;
             const item = document.querySelector(query);
             item.classList.add('active');
-            item.scrollIntoView();
+
+            const container = document.querySelector('.sidebar-scrollbox');
+
+            const yOffset = -200;
+            const y = item.getBoundingClientRect().top + container.scrollTop + yOffset;
+            container.scrollTo({top: y});
         });
         </script>
 
