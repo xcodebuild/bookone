@@ -338,9 +338,9 @@ class Book {
                 url = this.getConfig().base + url.replace(/^(\.\.\/)+/, '');
             }
 
-            const id = url.split('#')[1] || '';
+            const fullCaption = (titleIndex !== -1) ? token.attrs![titleIndex][1] : null;
 
-            const caption = (titleIndex !== -1) ? token.attrs![titleIndex][1] : null;
+			const [caption, id] = fullCaption?.split('|').map(item => item.trim()) || [];
 
             const alt = this.md!.utils.escapeHtml(token.content);
 
