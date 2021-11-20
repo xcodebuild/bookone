@@ -197,9 +197,9 @@
 <p>Use first argument in image markup to display a title for image. And image with title will have index like <code>Figure 1-2</code>， it's ordered within Chapter.</p>
 <pre><code class="language-markdown">![image alt](../public/images/safari.png &quot;Image Title&quot;)
 </code></pre>
-<p><figure >
+<p><figure id="safari">
     <img
-        src="/bookone/public/images/safari.png#safari"
+        src="/bookone/public/images/safari.png"
         alt="image alt">
         <figcaption>
             <strong>Figure 2-1: </strong>
@@ -208,16 +208,16 @@
 </figure>
 </p>
 <h2>Cite Image</h2>
-<p>You can give id to image with <code>#</code> in url.</p>
-<pre><code class="language-markdown">![image alt](../../doc/public/images/safari.png#safari &quot;Image Title&quot;)
+<p>You can give id to image with <code>|</code> after title.</p>
+<pre><code class="language-markdown">![image alt](../../doc/public/images/safari.png &quot;Image Title | safari&quot;)
 </code></pre>
 <p>Then cite them with</p>
 <pre><code class="language-markdown">[](#safari)
 </code></pre>
 <p>It will be rendered as image index like <code>Figure 1-2</code>.</p>
-<p><figure >
+<p><figure id="xcodebuild">
     <img
-        src="https://i.postimg.cc/0zQTZkZx/5436704-50.png#xcodebuild"
+        src="https://i.postimg.cc/0zQTZkZx/5436704-50.png"
         alt="image alt">
         <figcaption>
             <strong>Figure 2-2: </strong>
@@ -225,8 +225,8 @@
         </figcaption>
 </figure>
 </p>
-<p>For example this is a reference for above <code>Image Title</code> image: <a href="#safari"></a></p>
-<p>And this is a reference for <code>xcodebuild</code> image: <a href="#xcodebuild"></a></p>
+<p>For example this is a reference for above <code>Image Title</code> image: <a href="#safari">Figure 2-1</a></p>
+<p>And this is a reference for <code>xcodebuild</code> image: <a href="#xcodebuild">Figure 2-2</a></p>
 <blockquote>
 <p>Tip: Index for image would be miss in <code>start</code> mode at the moment, but it should works well in <code>build</code> mode.</p>
 </blockquote>
