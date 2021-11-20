@@ -10,13 +10,13 @@ Use first argument in image markup to display a title for image. And image with 
 ![image alt](../public/images/safari.png "Image Title")
 ```
 
-![image alt](../public/images/safari.png#safari "Image Title")
+![image alt](../public/images/safari.png "Image Title | safari")
 
 ## Cite Image
-You can give id to image with `#` in url.
+You can give id to image with `|` after title.
 
 ```markdown
-![image alt](../../doc/public/images/safari.png#safari "Image Title")
+![image alt](../../doc/public/images/safari.png "Image Title | safari")
 ```
 
 Then cite them with
@@ -27,7 +27,7 @@ Then cite them with
 
 It will be rendered as image index like `Figure 1-2`.
 
-![image alt](https://i.postimg.cc/0zQTZkZx/5436704-50.png#xcodebuild "xcodebuild")
+![image alt](https://i.postimg.cc/0zQTZkZx/5436704-50.png "xcodebuild | xcodebuild")
 
 For example this is a reference for above `Image Title` image: [](#safari)
 
