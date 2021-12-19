@@ -436,7 +436,6 @@ class Book {
 									link: child.prev?.relativePath,
 								},
 								toc: this.content.generateTocHTML(),
-								title: this.content.title,
 							});
 							fs.mkdirpSync(dir);
 							fs.writeFileSync(outputFile, html, 'utf-8');
