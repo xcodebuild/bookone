@@ -186,3 +186,7 @@ figure {
     width: fit-content;
     margin-top: 5px;
 }
+
+figure img {
+    max-height: 400px;
+}
