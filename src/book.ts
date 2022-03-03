@@ -12,6 +12,7 @@ import koaStatic from 'koa-static';
 import mount from 'koa-mount';
 import gracefulShutdown from 'http-graceful-shutdown';
 import { renderPDF } from './render-pdf';
+import { get } from 'lodash';
 
 
 const THEME_DIR = path.join(__dirname, '../theme');
@@ -140,6 +141,7 @@ class Content {
             }
             return content.childrenList.slice(1);
         }
+		const beforeFirstChapter = this.indexPath[0] < this.book.fisrtChapterIndex;
 		const vars = {
 			title: this.title,
 			href: (print ? '#': '') + this.relativePath,
@@ -150,11 +152,32 @@ class Content {
 				: excludeChapterFisrtChildList(this)
 						.map((item) => item.generateTocHTML(options))
 						.join(''),
-			beforeFirstChapter: this.indexPath[0] < this.book.fisrtChapterIndex,
+			beforeFirstChapter,
 			root: this.parent === null,
 		};
-		if (this.isLeaf) {
-			return this.book.getRenderer('sidebar-section.hbs')(vars);
+		if (this.isLeaf && !beforeFirstChapter) {
+			// section
+			// render section and its subsection
+			const content = this.getContent();
+			const REGEX_SUB_TITLE = /\n##\s+(.+)/g;
+			const subTitles = Array.from(content.matchAll(REGEX_SUB_TITLE)).map(item => {
+				const match = item[0];
+				if (match) {
+					const title = match.replace(/\n##\s+/, '');
+					return title;
+				}
+			}).map((title, index) => {
+				const subVars = {
+					title,
+					href: (print ? '#': '') + this.relativePath,
+					index: this.index + '.' + index,
+					children: null,
+					root: false,
+					beforeFirstChapter: false,
+				};
+				return this.book.getRenderer('sidebar-subsection.hbs')(subVars);
+			}).join('\n');
+			return this.book.getRenderer('sidebar-section.hbs')(vars) + subTitles;
 		}
 
 		return this.book.getRenderer('sidebar-chapter.hbs')(vars);

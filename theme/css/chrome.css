@@ -452,6 +452,10 @@ ul#searchresults span.teaser em {
     line-height: 1.9em;
 }
 
+.subsection {
+    margin-left: 20px;
+}
+
 /* Theme Menu Popup */
 
 .theme-popup {
