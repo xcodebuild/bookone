@@ -170,7 +170,7 @@ class Content {
 				const subVars = {
 					title,
 					href: (print ? '#': '') + this.relativePath,
-					index: this.index + '.' + index,
+					index: this.index + '.' + (index + 1),
 					children: null,
 					root: false,
 					beforeFirstChapter: false,
