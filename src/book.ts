@@ -155,7 +155,7 @@ class Content {
 			beforeFirstChapter,
 			root: this.parent === null,
 		};
-		if (this.isLeaf && !beforeFirstChapter) {
+		if (this.isLeaf && !beforeFirstChapter && print) {
 			// section
 			// render section and its subsection
 			const content = this.getContent();
