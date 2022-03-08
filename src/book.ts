@@ -287,9 +287,29 @@ class Book {
 	}
 
 	private scanFiles() {
+		const NAME_PREFIX = /^(\d+)-/;
+
+		const compareTwo = (a: string, b: string): number => {
+			const [, indexA] = a.match(NAME_PREFIX)!;
+			const [, indexB] = b.match(NAME_PREFIX)!;
+			const nA = Number.parseInt(indexA, 10);
+			const nB = Number.parseInt(indexB, 10);
+			if (nA === nB) {
+				const PREFIX = /^.*?\//;
+				return compareTwo(a.replace(PREFIX, ''), b.replace(PREFIX, ''));
+			} else {
+				return nA > nB ? 1 : -1;
+			}
+		};
 		const entries = glob
 			.sync(`${this.entryDirPath}/**/*.md`)
-			.map((item) => path.relative(this.entryDirPath, item));
+			.map((item) => path.relative(this.entryDirPath, item))
+			.filter(item => item.match(NAME_PREFIX))
+			.sort((a: string, b: string) => {
+				return compareTwo(a, b);
+			});
+
+		console.log(entries)
 		for (const item of entries) {
 			const splitList = item.split('/');
 			let cur = this.content;
